@@ -11,8 +11,16 @@ export default function SignUpPage() {
   const { signUpWithEmail, isLoading } = useAuthStore();
 
   async function handleSignUp() {
+    const trimmedName = name.trim();
+
+    // Don't create an account without a name
+    if (trimmedName === "") {
+      Alert.alert("Sign-up Error", "Please enter your name.");
+      return;
+    }
+
     try {
-      await signUpWithEmail(name, email, password);
+      await signUpWithEmail(trimmedName, email, password);
       if (!isLoading) {
         router.replace("/(tabs)");
       }
@@ -33,6 +41,7 @@ export default function SignUpPage() {
               className="w-full bg-gray-800 text-white p-4 rounded-lg mb-5"
               placeholder="Name"
               placeholderTextColor="#A3A3A3"
+              maxLength={100}
               onChangeText={setName}
               value={name}
             />
